@@ -1,7 +1,6 @@
  package jp.syned.cursomc;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +13,22 @@ import jp.syned.cursomc.domain.Cidade;
 import jp.syned.cursomc.domain.Cliente;
 import jp.syned.cursomc.domain.Endereco;
 import jp.syned.cursomc.domain.Estado;
+import jp.syned.cursomc.domain.ItemPedido;
+import jp.syned.cursomc.domain.Pagamento;
+import jp.syned.cursomc.domain.PagamentoComBoleto;
+import jp.syned.cursomc.domain.PagamentoComCartao;
+import jp.syned.cursomc.domain.Pedido;
 import jp.syned.cursomc.domain.Produto;
+import jp.syned.cursomc.domain.enums.EstadoPagamento;
 import jp.syned.cursomc.domain.enums.TipoCliente;
 import jp.syned.cursomc.repositories.CategoriaRepository;
 import jp.syned.cursomc.repositories.CidadeRepository;
 import jp.syned.cursomc.repositories.ClienteRepository;
 import jp.syned.cursomc.repositories.EnderecoRepository;
 import jp.syned.cursomc.repositories.EstadoRepository;
+import jp.syned.cursomc.repositories.ItemPedidoRepository;
+import jp.syned.cursomc.repositories.PagamentoRepository;
+import jp.syned.cursomc.repositories.PedidoRepository;
 import jp.syned.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -38,6 +46,12 @@ public class CursoMcApplication implements CommandLineRunner{
 	private ClienteRepository clienteRepo;	
 	@Autowired
 	private EnderecoRepository enderecoRepo;
+	@Autowired
+	private PedidoRepository pedidoRepo;
+	@Autowired
+	private PagamentoRepository pagamentoRepo;
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursoMcApplication.class, args);
@@ -85,6 +99,34 @@ public class CursoMcApplication implements CommandLineRunner{
 		cli1.getEnderecos().addAll(Arrays.asList(e1,e2));
 		clienteRepo.saveAll(Arrays.asList(cli1));
 		enderecoRepo.saveAll(Arrays.asList(e1,e2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:39"), cli1, e2);
+		
+		Pagamento pagto1 = new PagamentoComCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		
+		Pagamento pagto2 = new PagamentoComBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"), null);
+		ped2.setPagamento(pagto2);
+		
+		cli1.getPedidos().addAll(Arrays.asList(ped1,ped2));
+		
+		pedidoRepo.saveAll(Arrays.asList(ped1,ped2));
+		pagamentoRepo.saveAll(Arrays.asList(pagto1,pagto2));
+		
+		ItemPedido ip1 = new ItemPedido(ped1, p1, 0.00, 1, 2000.00);
+		ItemPedido ip2 = new ItemPedido(ped1, p3, 0.00, 2, 80.00);
+		ItemPedido ip3 = new ItemPedido(ped2, p2, 100.00, 1, 800.00);
+		
+		ped1.getItems().addAll(Arrays.asList(ip1,ip2));
+		ped2.getItems().addAll(Arrays.asList(ip3));
+		
+		p1.getItems().addAll(Arrays.asList(ip1));
+		p2.getItems().addAll(Arrays.asList(ip3));
+		p3.getItems().addAll(Arrays.asList(ip2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
 	}
 
 }

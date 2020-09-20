@@ -3,11 +3,12 @@ package jp.syned.cursomc.services;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import jp.syned.cursomc.domain.Categoria;
 import jp.syned.cursomc.repositories.CategoriaRepository;
-import jp.syned.cursomc.services.exceptions.DataIntegrityViolationException;
+import jp.syned.cursomc.services.exceptions.DataIntegrityException;
 import jp.syned.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -35,8 +36,8 @@ public class CategoriaService {
 		find(id);
 		try {
 			repo.deleteById(id);
-		}catch (org.springframework.dao.DataIntegrityViolationException e) {
-			throw new DataIntegrityViolationException("Nao e possivel excluir uma categoria que possui produtos");
+		}catch (DataIntegrityViolationException e) {
+			throw new DataIntegrityException("Nao e possivel excluir uma categoria que possui produtos");
 		}
 	}
 }

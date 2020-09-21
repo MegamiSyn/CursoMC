@@ -1,7 +1,5 @@
 package jp.syned.cursomc.resources.exception;
 
-import java.util.Iterator;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.HttpStatus;

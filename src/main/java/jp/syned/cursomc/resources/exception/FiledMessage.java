@@ -2,16 +2,16 @@ package jp.syned.cursomc.resources.exception;
 
 import java.io.Serializable;
 
-public class FildMessage implements Serializable{
+public class FiledMessage implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	private String fildName;
 	private String message;
 	
-	public FildMessage() {}
+	public FiledMessage() {}
 
-	public FildMessage(String fildName, String message) {
+	public FiledMessage(String fildName, String message) {
 		super();
 		this.fildName = fildName;
 		this.message = message;

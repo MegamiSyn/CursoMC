@@ -12,12 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 
 import jp.syned.cursomc.domain.Cliente;
-import jp.syned.cursomc.domain.enums.TipoCliente;
 import jp.syned.cursomc.dto.ClienteDTO;
-import jp.syned.cursomc.dto.ClienteNewDTO;
 import jp.syned.cursomc.repositories.ClienteRepository;
 import jp.syned.cursomc.resources.exception.FiledMessage;
-import jp.syned.cursomc.services.validation.utils.BR;
 
 public class ClientUpdateValidator implements ConstraintValidator<ClientUpdate, ClienteDTO> {
 	
